@@ -10,6 +10,10 @@ from flask import Flask, send_from_directory, request
 from flask_socketio import SocketIO, emit
 from flask import Flask, send_from_directory, request, jsonify
 
+# ── тута свечки ─────────────────────────────────────
+from candle_db import init_db, insert_candle, load_candles
+# ────────────────────────────────────────────────────
+
 # ── silence per-trade spam ─────────────
 #orig_print = builtins.print
 #builtins.print = lambda *a, **k: None               
@@ -317,8 +321,10 @@ def match_and_broadcast():
                 for t in trades:
                     notify_agent_fill(t)
                     socketio.emit("trade", t)  # Отправляем сделку клиенту
-                    for cm in candle_managers.values():
-                        cm.update(t['price'], t['volume'])  # Обновляем свечи
+                    for tf, cm in candle_managers.items():
+                        cm.update(t['price'], t['volume'])  # Обновляем свечку
+                        if cm.current_candle:
+                            insert_candle(tf, cm.current_candle)  # Сохраняем последнюю свечку
 
             # Отправляем свечи
             for tf, cm in candle_managers.items():
@@ -460,9 +466,13 @@ def candle_tick_loop():
 candle_managers = {
     tf: CandleManager(interval_seconds=tf) for tf in [1, 5, 15, 60, 300]
 }
+for tf, cm in candle_managers.items():
+    cm.history = load_candles(tf)
+
 
 # --- MAIN ---
 if __name__ == '__main__':
+    init_db()
     inject_initial_liquidity()
     inject_initial_trades()
     socketio.start_background_task(match_and_broadcast)
