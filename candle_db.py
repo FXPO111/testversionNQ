@@ -29,13 +29,14 @@ def insert_candle(conn, interval, candle):
         VALUES (?, ?, ?, ?, ?, ?, ?)
     ''', (
         interval,
-        candle['timestamp'],
-        candle['open'],
-        candle['high'],
-        candle['low'],
-        candle['close'],
-        candle['volume']
+        candle.timestamp,
+        candle.open,
+        candle.high,
+        candle.low,
+        candle.close,
+        candle.volume
     ))
+
     conn.commit()
 
 
