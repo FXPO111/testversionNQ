@@ -468,8 +468,22 @@ conn = init_db()
 candle_managers = {
     tf: CandleManager(interval_seconds=tf) for tf in [1, 5, 15, 60, 300]
 }
+now = int(time.time())
+from_ts = now - 86400  # последние сутки
+to_ts = now
+
 for tf, cm in candle_managers.items():
-    cm.history = load_candles(conn, tf)
+    loaded_candles = load_candles(conn, tf, from_ts, to_ts)
+    cm.history = []
+    for c in loaded_candles:
+        cm.history.append(Candle(
+            timestamp=c['timestamp'],
+            open=c['open'],
+            high=c['high'],
+            low=c['low'],
+            close=c['close'],
+            volume=c['volume']
+        ))
 
 
 # --- MAIN ---
