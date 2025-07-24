@@ -22,7 +22,7 @@ def init_db():
     return conn
 
 
-def save_candle(conn, interval, candle):
+def insert_candle(conn, interval, candle):
     cur = conn.cursor()
     cur.execute('''
         INSERT OR REPLACE INTO candles (interval, timestamp, open, high, low, close, volume)
@@ -39,7 +39,7 @@ def save_candle(conn, interval, candle):
     conn.commit()
 
 
-def fetch_candles(conn, interval, from_ts, to_ts):
+def load_candles(conn, interval, from_ts, to_ts):
     cur = conn.cursor()
     cur.execute('''
         SELECT timestamp, open, high, low, close, volume
