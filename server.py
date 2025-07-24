@@ -324,7 +324,7 @@ def match_and_broadcast():
                     for tf, cm in candle_managers.items():
                         cm.update(t['price'], t['volume'])  # Обновляем свечку
                         if cm.current_candle:
-                            insert_candle(tf, cm.current_candle)  # Сохраняем последнюю свечку
+                            insert_candle(conn, tf, cm.current_candle)  # Сохраняем последнюю свечку
 
             # Отправляем свечи
             for tf, cm in candle_managers.items():
@@ -463,16 +463,17 @@ def candle_tick_loop():
 
 
 # --- Инициализация менеджеров таймфреймов ---
+conn = init_db()
+
 candle_managers = {
     tf: CandleManager(interval_seconds=tf) for tf in [1, 5, 15, 60, 300]
 }
 for tf, cm in candle_managers.items():
-    cm.history = load_candles(tf)
+    cm.history = load_candles(conn, tf)
 
 
 # --- MAIN ---
 if __name__ == '__main__':
-    init_db()
     inject_initial_liquidity()
     inject_initial_trades()
     socketio.start_background_task(match_and_broadcast)
