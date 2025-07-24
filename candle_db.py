@@ -50,13 +50,14 @@ def load_candles(conn, interval, from_ts, to_ts):
     ''', (interval, from_ts, to_ts))
     rows = cur.fetchall()
     return [
-        {
-            'timestamp': row[0],
-            'open': row[1],
-            'high': row[2],
-            'low': row[3],
-            'close': row[4],
-            'volume': row[5],
-        }
-        for row in rows
-    ]
+        Candle(
+            timestamp=row[0],
+            open=row[1],
+            high=row[2],
+            low=row[3],
+            close=row[4],
+            volume=row[5]
+    )
+    for row in rows
+]
+
