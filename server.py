@@ -474,7 +474,7 @@ to_ts = now + 100000
 
 for tf, cm in candle_managers.items():
     cm.history = load_candles(conn, tf, from_ts, to_ts)
-
+    print(f"[INFO] Loaded {len(cm.history)} candles for tf {tf}s")
 
 # --- MAIN ---
 if __name__ == '__main__':
