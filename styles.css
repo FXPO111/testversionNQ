@@ -1,0 +1,319 @@
+/* Общие стили */
+body {
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #0e1117;
+  color: #c9d1d9;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+}
+
+header {
+  background-color: #161b22;
+  padding: 15px 20px;
+  font-size: 1.4rem;
+  font-weight: 600;
+  border-bottom: 1px solid #30363d;
+  color: #58a6ff;
+  user-select: none;
+}
+
+main {
+  display: flex;
+  flex: 1;
+  gap: 20px;
+  padding: 20px;
+  overflow: hidden;
+}
+
+section {
+  background-color: #161b22;
+  border: 1px solid #30363d;
+  border-radius: 6px;
+  padding: 15px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  user-select: none;
+}
+
+h2 {
+  margin: 0 0 15px 0;
+  font-weight: 600;
+  color: #58a6ff;
+}
+
+/* График слева */
+#chart-section {
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+}
+
+#price-chart {
+  flex: 1;
+  border: 1px solid #30363d;
+  border-radius: 6px;
+  background-color: #0e1117;
+  user-select: none;
+}
+
+/* Стакан посередине */
+#orderbook-section {
+  flex: 0 0 300px;
+  display: flex;
+  flex-direction: column;
+  background-color: #161b22; 
+  border-radius: 6px;
+  border: 1px solid #30363d;
+}
+
+#orderbook-container {
+  display: flex;
+  flex-direction: column-reverse;
+  background-color: #151a1f !important;
+  position: relative;
+  overflow: hidden;
+}
+#asks-container,
+#bids-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+#mid-price {
+  flex-shrink: 0;
+  height: 38px;
+  line-height: 38px;
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-align: center;
+  border-top: 1px solid #30363d;
+  border-bottom: 1px solid #30363d;
+  color: #c9d1d9;
+}
+
+
+
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
+  font-size: 0.9rem;
+  table-layout: fixed;
+}
+
+thead {
+  background-color: #21262d;
+}
+
+thead th {
+  padding: 8px 6px;
+  text-align: left;
+  color: #8b949e;
+  border-bottom: 1px solid #30363d;
+  user-select: none;
+}
+
+tbody tr {
+  cursor: default;
+  position: relative; /* для объёмных линий */
+  overflow: hidden;
+  transition: background-color 0.15s ease;
+}
+
+tbody tr:hover {
+  background-color: #2d333b;
+}
+
+tbody td {
+  padding: 6px 6px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+#bids-table tbody tr {
+  color: #3fb950;
+}
+
+#asks-table tbody tr {
+  color: #f85149;
+}
+
+#mid-price {
+  text-align: center;
+  padding: 8px 0;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #c9d1d9;
+  border-top: 1px solid #30363d;
+  border-bottom: 1px solid #30363d;
+  margin: 0;
+  height: 38px;           /* Фиксированная высота */
+  line-height: 38px;      /* Центровка текста по вертикали */
+  transition: color 0.3s ease;
+}
+
+
+/* Линии объема в стакане */
+.volume-line {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  pointer-events: none;
+  border-radius: 4px;
+  transition: width 0.3s ease-out;
+  z-index: 1;
+  opacity: 0.3;
+}
+
+.volume-line.bid {
+  right: 0;
+  background-color: #3fb950;
+  border-radius: 0 4px 4px 0;
+}
+
+.volume-line.ask {
+  right: 0;
+  background-color: #f85149;
+  border-radius: 0 4px 4px 0;
+}
+
+
+/* Лента сделок справа */
+#trades-section {
+  flex: 0 0 300px;
+  overflow-y: auto;
+  user-select: none;
+}
+
+#trades-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-size: 0.9rem;
+  max-height: 600px;
+  overflow-y: auto;
+}
+
+#trades-list li {
+  padding: 6px 8px;
+  border-bottom: 1px solid #30363d;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  opacity: 0;
+  transform: translateX(20px);
+  animation: fadeInSlide 0.5s forwards;
+}
+
+#trades-list li.buy {
+  color: #3fb950;
+}
+
+#trades-list li.sell {
+  color: #f85149;
+}
+
+@keyframes fadeInSlide {
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Скроллбар */
+#trades-list::-webkit-scrollbar,
+#orderbook-container::-webkit-scrollbar {
+  display: none;
+}
+
+#trades-list::-webkit-scrollbar-thumb,
+#orderbook-container::-webkit-scrollbar-thumb {
+  background-color: #30363d;
+  border-radius: 4px;
+}
+
+#trades-list::-webkit-scrollbar-track,
+#orderbook-container::-webkit-scrollbar-track {
+  background-color: #161b22;
+}
+
+/* Footer */
+footer {
+  background-color: #161b22;
+  text-align: center;
+  padding: 10px 0;
+  font-size: 0.8rem;
+  color: #484f58;
+  border-top: 1px solid #30363d;
+  user-select: none;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  main {
+    flex-direction: column;
+    padding: 10px;
+  }
+  #orderbook-section,
+  #trades-section {
+    flex: none;
+    width: 100%;
+    max-height: 250px;
+  }
+  #orderbook-container {
+    flex-direction: row;
+    max-height: 200px;
+  }
+}
+
+
+/* ========== фазы рынка на графике ========== */
+.phase-rect {
+    border-radius: 7px;
+    box-shadow: 0 1px 10px 0 rgba(30,40,60,0.18);
+    transition: left 0.2s, width 0.2s;
+    pointer-events: none;
+}
+
+#toggle-phase-btn {
+  margin-left: 20px;
+  background: #202534;
+  color: #8b949e;
+  border-radius: 7px;
+  border: none;
+  padding: 6px 18px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+#toggle-phase-btn:hover {
+  background: #232c43;
+  color: #9ab6e4;
+}
+
+.orderbook-row.advcore-order {
+    background-color: rgba(255, 215, 0, 0.35);  /* нежный жёлтый фон */
+    border-left: 2px solid gold;
+}
+
+.volume-line.bid.advcore-line {
+    background-color: gold;
+}
+
+.volume-line.ask.advcore-line {
+    background-color: gold;
+}
+
+.limit[data-agent-id*="adv"] {
+    background-color: yellow;
+}
+
+
+
