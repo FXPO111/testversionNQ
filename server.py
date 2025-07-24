@@ -40,7 +40,7 @@ from smart_money import SmartMoneyManager
 #from momentum_igniter import SmartSidewaysSqueezeAgent
 from bank_agent import BankAgentManager
 from corporate_vwap_agent import CorporateVWAPAgent
-#from trend_impuls import TrendAgentManager
+from trend_impuls import TrendAgentManager
 from bank_agent_v2 import BankAgentManagerv2
 
 # --- Логирование ---
@@ -116,7 +116,7 @@ bank_agent = BankAgentManager(agent_id="bank1", total_capital=1_000_000_000.0)
 market_maker = MarketMakerManager(agent_id="mm1", total_capital=70_000_000.0)
 corp_vwap = CorporateVWAPAgent(agent_id="corp_vwap", total_capital=80_000_000.0, legs=5)
 liquidity_manager = LiquidityManagerAgent(agent_id="liquidity_manager1", capital=1_000_000.0)
-#trend_imp = TrendAgentManager(agent_id="trend_imp1")
+trend_imp = TrendAgentManager(agent_id="trend_imp1")
 bank_agent_v2 = BankAgentManagerv2(agent_id="bankadv1", total_capital=1_000_000_000.0)
 
 AGENTS = [
@@ -137,7 +137,7 @@ AGENTS = [
     #momentum_igniter,  
     bank_agent,
     corp_vwap,
-    #trend_imp,
+    trend_imp,
     bank_agent_v2
 ]
 
