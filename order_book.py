@@ -38,7 +38,7 @@ class OrderBook:
         self.ask_prices: List[float] = []
         self.orders: Dict[str, Order] = {}
         self.last_trade_price: Optional[float] = None
-        self.trade_history: deque[Dict[str, Any]] = deque(maxlen=100)
+        self.trade_history: deque[Dict[str, Any]] = deque(maxlen=1000)
 
     def _add_price_level(self, side: OrderSide, price: float):
         if side == OrderSide.BID:
