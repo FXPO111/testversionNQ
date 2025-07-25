@@ -91,11 +91,14 @@ class MatchingEngine:
     def add_order(self, order: Order):
         trades = self.order_book.add_order(order)
         if trades:
-            logging.info(f"[MATCHED] Order {order.order_id} executed: {len(trades)} trades")
             for trade in trades:
+                self.trade_history.append(trade)  
+                self.last_trade_price = trade['price']
                 self.notify_agent_fill(trade)
+            logging.info(f"[MATCHED] Order {order.order_id} executed: {len(trades)} trades")
         else:
             logging.info(f"[BOOK] Order {order.order_id} placed in book")
+
 
     def _match_market_order(self, market_order: Order):
         logging.debug(f"[DEBUG] _match_market_order called for {market_order.order_id} (side={market_order.side.name}, qty={market_order.volume})")
