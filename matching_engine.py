@@ -39,6 +39,7 @@ class PriceLevel:
 
 class MatchingEngine:
     def __init__(self):
+        self.order_book = OrderBook()
         self.bids: Dict[float, PriceLevel] = {}
         self.asks: Dict[float, PriceLevel] = {}
         self.bid_prices: List[float] = []  # max-heap via negative prices
@@ -95,8 +96,6 @@ class MatchingEngine:
                 self.notify_agent_fill(trade)
         else:
             logging.info(f"[BOOK] Order {order.order_id} placed in book")
-            for trade in trades:
-                self.notify_agent_fill(trade)
 
     def _match_market_order(self, market_order: Order):
         logging.debug(f"[DEBUG] _match_market_order called for {market_order.order_id} (side={market_order.side.name}, qty={market_order.volume})")
