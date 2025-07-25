@@ -682,7 +682,7 @@ class InitiatorUnit:
 
     def compute_metrics(self, order_book: OrderBook):
         # Возьмем последние трейды
-        trades = order_book.trade_history[-self.lookback_trades:]
+        trades = list(order_book.trade_history)[-self.lookback_trades:]
 
         if len(trades) < self.lookback_trades:
             return None
