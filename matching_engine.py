@@ -45,7 +45,7 @@ class MatchingEngine:
         self.ask_prices: List[float] = []  # min-heap
         self.orders: Dict[str, Order] = {}
         self.last_trade_price: Optional[float] = None
-        self.trade_history: List[Dict[str, Any]] = []
+        self.trade_history: deque[Dict[str, Any]] = deque(maxlen=1000)
 
     def _add_price_level(self, side: OrderSide, price: float):
         book = self.bids if side == OrderSide.BID else self.asks
@@ -223,6 +223,7 @@ class MatchingEngine:
             logging.info(f"[CANCEL_ORDER] Order {order_id} cancelled")
 
     def tick(self):
+        # 1. Обновляем TTL и отменяем истёкшие
         to_cancel = []
         for order in self.orders.values():
             if order.ttl is not None and order.is_active():
@@ -231,10 +232,18 @@ class MatchingEngine:
                     to_cancel.append(order.order_id)
         for oid in to_cancel:
             self.cancel_order(oid)
+
+        # 2. Чистим неактивные ордера
+        for oid in list(self.orders):
+            if not self.orders[oid].is_active():
+                del self.orders[oid]
+
+        # 3. Чистим пустые уровни
         for price in list(self.bids.keys()):
             self._remove_price_level_if_empty(OrderSide.BID, price)
         for price in list(self.asks.keys()):
             self._remove_price_level_if_empty(OrderSide.ASK, price)
+
 
     def get_order_book_snapshot(self, depth: int = 10) -> dict:
         bids = []
